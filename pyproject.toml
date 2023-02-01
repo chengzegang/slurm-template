@@ -1,0 +1,127 @@
+[build-system]
+requires = [
+  "hatchling",
+  "mypy",
+  "mypy_extensions",
+  "numpy",
+  "types-protobuf",
+  "types-six",
+  "types-tabulate",
+  "typing_extensions",
+  "types-psutil",
+  "types-pyyaml",
+  "types-Pillow",
+  "types-setuptools",
+  "types-tqdm",
+  "pandas-stubs",
+  ]
+build-backend = "hatchling.build"
+
+[tool.hatch.build]
+sources = ["src"]
+directory = "dest"
+[tool.hatch.build.targets.sdist.hooks.mypyc]
+dependencies = ["hatch-mypyc"]
+
+[build.targets.sdist.hooks.mypyc]
+include = ["src/"]
+exclude = ["tests/", "dev/"]
+mypy-args = [
+  "--verbose",
+  "--install-types",
+  "--non-interactive",
+  "--config-file=mypy.ini",
+]
+
+[tool.hatch.build.wheel.sdist.hooks.mypyc]
+dependencies = ["hatch-mypyc"]
+
+[build.targets.wheel.hooks.mypyc]
+mypy-args = [
+  "--config-file=mypy.ini",
+]
+
+[project]
+name = "project"
+description = 'a template for pytorch deep learning project'
+readme = "README.md"
+requires-python = ">=3.9"
+license = "MIT"
+keywords = []
+authors = [
+  { name = "U.N. Owen", email = "void@some.where" },
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+]
+dependencies = [
+  "tensorboard",
+  "matplotlib",
+  "numpy",
+  "scipy",
+  "matplotlib",
+  "pandas",
+  "pandas-stubs",
+  "Pillow",
+  "types-Pillow",
+  "kornia",
+  "kornia-rs",
+  "pyarrow",
+  "tensorboard",
+  "tqdm",
+  "types-tqdm",
+  "pyarrow",
+  "pyyaml",
+  "types-pyyaml",
+  "pytest",
+  "pytest-cov",
+  "pytest-sugar",
+  "mypy",
+  "isort",
+  "black",
+  "tox",
+  "click",
+  "typing-extensions",
+  "torch>=1.13.1",
+  "torchvision>=0.14.1",
+]
+dynamic = ["version"]
+
+[project.urls]
+Documentation = "https://github.com/unknown/project#readme"
+Issues = "https://github.com/unknown/project/issues"
+Source = "https://github.com/unknown/project"
+
+[tool.hatch.version]
+path = "project/__about__.py"
+
+[tool.hatch.envs.default]
+dependencies = [
+  "pytest",
+  "pytest-cov",
+]
+[tool.hatch.envs.default.scripts]
+cov = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=project --cov=tests {args}"
+no-cov = "cov --no-cov {args}"
+
+[[tool.hatch.envs.test.matrix]]
+python = ["39", "310"]
+
+[tool.coverage.run]
+branch = true
+parallel = true
+omit = [
+  "project/__about__.py",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+  "no cov",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+]
+
+[tool.isort]
+multi_line_output = 3

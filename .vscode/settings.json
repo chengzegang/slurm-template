@@ -1,0 +1,7 @@
+{
+    "python.formatting.provider": "black",
+    "python.analysis.importFormat": "relative",
+    "python.linting.flake8Enabled": true,
+    "mypy.configFile": "",
+    "python.linting.mypyEnabled": true
+}
