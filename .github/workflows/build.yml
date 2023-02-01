@@ -39,4 +39,4 @@ jobs:
                   hatch build
 
             - name: Install with pip
-              run: hatch run pip install dist/project-0.0.1-py3-none-any.whl
+              run: hatch run pip install dest/project-0.0.1-py3-none-any.whl
