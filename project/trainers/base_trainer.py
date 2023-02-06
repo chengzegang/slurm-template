@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class Trainer(ABC):
+class BaseTrainer(ABC):
     @abstractmethod
     def train(self, *args, **kwargs):
         pass

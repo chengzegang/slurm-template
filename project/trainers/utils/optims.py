@@ -8,7 +8,7 @@ from torch import nn
 from torch.optim import SGD, Adam, AdamW
 from torch.optim.lr_scheduler import LambdaLR
 
-from .. import lr_lambda
+from . import lr_lambda
 
 
 def get_optimizer(

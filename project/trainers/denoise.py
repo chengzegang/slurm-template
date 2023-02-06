@@ -20,11 +20,11 @@ from tqdm.auto import tqdm
 from .. import models
 from ..datasets import ImageFolder
 from ..transforms import AddNoise, ResizeCenterCrop
-from . import checkpoint
-from ._trainer import Trainer
-from .logger import Logger, TensorboardLogger
-from .optims import get_optims
-from .runs import get_run_dir
+from .utils import checkpoint
+from .base_trainer import BaseTrainer
+from .utils.logger import Logger, TensorboardLogger
+from .utils.optims import get_optims
+from .utils.runs import get_run_dir
 
 if torch.__version__.startswith("2"):
     from torch.optim.lr_scheduler import LRScheduler  # type: ignore
@@ -32,7 +32,7 @@ else:
     from torch.optim.lr_scheduler import _LRScheduler as LRScheduler
 
 
-class VitDenoiseTrainer(Trainer):
+class VitDenoiseTrainer(BaseTrainer):
     def __init__(
         self,
         model: nn.Module,
