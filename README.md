@@ -1,6 +1,6 @@
 
 # A PyTorch Project Template
-
+[![CodeFactor](https://www.codefactor.io/repository/github/chengzegang/pytorchtemplate/badge/master)](https://www.codefactor.io/repository/github/chengzegang/pytorchtemplate/overview/master)
 [![test](https://github.com/chengzegang/PyTorchTemplate/actions/workflows/test.yml/badge.svg)](https://github.com/chengzegang/PyTorchTemplate/actions/workflows/test.yml)
 [![build](https://github.com/chengzegang/PyTorchTemplate/actions/workflows/build.yml/badge.svg)](https://github.com/chengzegang/PyTorchTemplate/actions/workflows/build.yml)
 
