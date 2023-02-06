@@ -28,7 +28,7 @@ class TensorboardLogger(Logger):
         self._writter = self._get_logger(logdir)
 
     def _get_logger(self, logdir: str) -> SummaryWriter:
-        runs_dir = os.path.join(logdir, "runs")
+        runs_dir = os.path.join(logdir, "records")
         os.makedirs(runs_dir, exist_ok=True)
         return SummaryWriter(runs_dir)
 

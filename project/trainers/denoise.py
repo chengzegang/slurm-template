@@ -21,7 +21,7 @@ from .. import models
 from ..datasets import ImageFolder
 from ..transforms import AddNoise, ResizeCenterCrop
 from .utils import checkpoint
-from .base_trainer import BaseTrainer
+from .base_trainer import Trainer
 from .utils.logger import Logger, TensorboardLogger
 from .utils.optims import get_optims
 from .utils.runs import get_run_dir
@@ -32,7 +32,7 @@ else:
     from torch.optim.lr_scheduler import _LRScheduler as LRScheduler
 
 
-class VitDenoiseTrainer(BaseTrainer):
+class VitDenoiseTrainer(Trainer):
     def __init__(
         self,
         model: nn.Module,
