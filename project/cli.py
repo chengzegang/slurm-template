@@ -34,7 +34,7 @@ def cli():
     "--ckpt-times-per-epoch", type=int, help="Checkpoint times per epoch", default=10
 )
 @click.option("--device", type=str, help="Device", default="cuda")
-@click.option("--verbose", type=bool, help="Verbose", default=True)
+@click.option("--verbose", is_flag=True, help="Verbose")
 @click.option("--image-size", type=int, help="Image size", default=224)
 @click.option("--patch-size", type=int, help="Patch size", default=16)
 @click.option(

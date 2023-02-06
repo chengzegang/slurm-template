@@ -20,11 +20,11 @@ from tqdm.auto import tqdm
 from .. import models
 from ..datasets import ImageFolder
 from ..transforms import AddNoise, ResizeCenterCrop
-from . import ckpter
+from . import checkpoint
 from ._trainer import Trainer
 from .logger import Logger, TensorboardLogger
 from .optims import get_optims
-from .versions import get_version_dir
+from .runs import get_run_dir
 
 if torch.__version__.startswith("2"):
     from torch.optim.lr_scheduler import LRScheduler  # type: ignore
@@ -73,7 +73,7 @@ class VitDenoiseTrainer(Trainer):
         self.verbose = False
 
         if local_rank == 0:
-            self.logdir = get_version_dir(logdir)
+            self.logdir = get_run_dir(logdir)
             self.ckptdir = os.path.join(self.logdir, "ckpts")
             os.makedirs(self.ckptdir, exist_ok=True)
             self.logger = TensorboardLogger(self.logdir)
@@ -119,15 +119,6 @@ class VitDenoiseTrainer(Trainer):
     @classmethod
     def _create_dataset(cls, root: str, transforms: Callable, verbose: bool) -> Dataset:
         return ImageFolder(root, transforms=transforms, verbose=verbose)
-
-    @classmethod
-    def _get_ckpt_name(cls, metrics: Dict) -> str:
-        date = datetime.now().strftime("%Y%m%d_%H%M%S")
-        return f'epoch_{metrics["epoch"]}_step_{metrics["steps"]}_loss_{metrics["loss"]:.4f}_date_{date}.pth'
-
-    @classmethod
-    def _get_ckpt_path(cls, ckptdir: str, metrics: Dict) -> str:
-        return os.path.join(ckptdir, cls._get_ckpt_name(metrics))
 
     @classmethod
     def _tensor_to_img(cls, x: torch.Tensor, reverse_norm: bool = False) -> np.ndarray:
@@ -224,8 +215,18 @@ class VitDenoiseTrainer(Trainer):
                         lr=results[5],
                         loss=results[4].item(),
                     )
-                    ckpt_path = cls._get_ckpt_path(ckptdir, metrics)
-                    ckpter.save(ckpt_path, model, optimizer, scheduler, metrics)
+
+                    checkpoint.save(
+                        model,
+                        ckptdir,
+                        steps,
+                        results[4].item(),
+                        False,
+                        optimizer,
+                        scheduler,
+                        True,
+                        appendix=metrics,
+                    )
                 steps += 1
                 pbar.set_postfix(loss=results[4].item(), lr=results[5])
                 pbar.update(1)

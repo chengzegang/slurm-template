@@ -24,6 +24,8 @@ def listdir(root: str, regex: str, recursive: bool = True) -> List[str]:
         print(f"{__RUST_EXT_NAME!r} has been imported")
         res: List[str] = rust_ext.listdir(root, regex, recursive)  # type: ignore
         return res
+    else:
+        print(f"{__RUST_EXT_NAME!r} not found, use python native implementation.")
 
     files: List[str] = []
     for root_, dirs, files in os.walk(root):
