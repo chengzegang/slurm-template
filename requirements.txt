@@ -1,5 +1,6 @@
 click
 kornia
+kornia_rs
 tensorboard
 matplotlib
 numpy
