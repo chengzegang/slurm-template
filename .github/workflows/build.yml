@@ -9,10 +9,6 @@ concurrency:
     group: ${{ github.workflow }}-${{ github.ref }}
     cancel-in-progress: true
 
-env:
-    PYTHONUNBUFFERED: "1"
-    FORCE_COLOR: "1"
-
 jobs:
     build:
         runs-on: ubuntu-latest

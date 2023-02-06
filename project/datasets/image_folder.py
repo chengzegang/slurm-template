@@ -3,9 +3,7 @@ from __future__ import annotations
 import importlib.util
 import os
 import re
-import sys
-from pathlib import Path
-from typing import Callable, List, Tuple
+from typing import Callable, List
 
 import pandas as pd
 import torch
@@ -17,24 +15,22 @@ __RUST_EXT_NAME = "rust_ext"
 
 def listdir(root: str, regex: str, recursive: bool = True) -> List[str]:
 
+    res: List[str] = []
     if importlib.util.find_spec(__RUST_EXT_NAME) is not None:
-        # If you choose to perform the actual import ...
         import rust_ext  # type: ignore
 
         print(f"{__RUST_EXT_NAME!r} has been imported")
-        res: List[str] = rust_ext.listdir(root, regex, recursive)  # type: ignore
+        res = rust_ext.listdir(root, regex, recursive)  # type: ignore
         return res
     else:
         print(f"{__RUST_EXT_NAME!r} not found, use python native implementation.")
-
-    files: List[str] = []
     for root_, dirs, files in os.walk(root):
         for file in files:
             if re.match(regex, file):
-                files.append(os.path.join(root_, file))
+                res.append(os.path.join(root_, file))
         if not recursive:
             break
-    return files
+    return res
 
 
 class ImageFolder(Dataset):
