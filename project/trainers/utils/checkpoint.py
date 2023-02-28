@@ -3,7 +3,7 @@ from typing import Any, Dict, Tuple
 import torch
 from torch import nn
 from torch.optim import Optimizer
-from torch.optim.lr_scheduler import _LRScheduler
+from torch.optim.lr_scheduler import LRScheduler
 import os
 from datetime import datetime
 from torch.nn.parallel import DistributedDataParallel
@@ -18,7 +18,7 @@ def save(
     key_metric: float,
     larger_is_better: bool = False,
     optimizer: Optimizer | None = None,
-    scheduler: _LRScheduler | None = None,
+    scheduler: LRScheduler | None = None,
     prune: bool = False,
     mkdirs: bool = True,
     max_n: int = 5,
@@ -75,8 +75,8 @@ def loadon(
     ckptpath: str,
     model: nn.Module,
     optimizer: Optimizer,
-    scheduler: _LRScheduler,
-) -> Tuple[nn.Module, Optimizer, _LRScheduler]:
+    scheduler: LRScheduler,
+) -> Tuple[nn.Module, Optimizer, LRScheduler]:
     ckpt = load(ckptpath)
     model.load_state_dict(ckpt["model_state_dict"])
     optimizer.load_state_dict(ckpt["optimizer_state_dict"])
