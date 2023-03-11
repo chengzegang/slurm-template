@@ -28,13 +28,12 @@ class PatchEmbedding(nn.Module):
         self.register_buffer("positional_ids", positional_ids)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-
         patch_embedds: torch.Tensor = (
             self.patch_embedding(x).flatten(2).transpose(-1, -2)
         )
         patch_embedds: torch.Tensor = patch_embedds + self.positional_embedding(
             self.positional_ids
-        )
+        ).expand_as(patch_embedds)
         return patch_embedds
 
 
@@ -67,7 +66,6 @@ class VisionTransformer(nn.Module):
         )
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-
         patch_embedds: torch.Tensor = self.patch_embedding(x)
         output_logits: torch.Tensor = self.layers(patch_embedds)
 

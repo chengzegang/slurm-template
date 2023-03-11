@@ -7,7 +7,7 @@
     "terminal.integrated.minimumContrastRatio": 4,
     "terminal.integrated.smoothScrolling": true,
     "terminal.integrated.tabs.title": "${local} ${process} in ${cwd}",
-    "mypy.configFile": "configs/mypy.ini",
+    "mypy.configFile": "pyproject.toml",
     "mypy.debugLogging": true,
     "mypy.runUsingActiveInterpreter": true,
     "python.linting.mypyEnabled": true,
