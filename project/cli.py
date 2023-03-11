@@ -52,7 +52,7 @@ def train_model(**kwargs):
     if kwargs["clear"]:
         shutil.rmtree(kwargs["logdir"], ignore_errors=True)
     if kwargs["ddp"]:
-        ddp.start(trainers.train, **kwargs)
+        ddp.start(trainers.train, kwargs)
     else:
         trainers.train(**kwargs)
 
