@@ -17,7 +17,7 @@ singularity exec --nv \
 		--overlay /scratch/work/public/ml-datasets/imagenet/imagenet-train.sqf:ro \
   		--overlay /scratch/work/public/ml-datasets/imagenet/imagenet-val.sqf:ro \
 	    /scratch/work/public/singularity/cuda11.6.124-cudnn8.4.0.27-devel-ubuntu20.04.4.sif \
-	    /bin/bash -c "source /ext3/env.sh; python -m src --dataset-dir /imagenet/train \
+	    /bin/bash -c "source /ext3/env.sh; python -m project -m vit -t denoise -r /imagenet/train \
 		--num-workers 16 --batch-size 128 --logdir logs/384 --max-epochs 600 \
 		--ddp --warmup-epochs 30 --image-size 384 --patch-size 16 --split-ratio 0.25 0.05 0.7 \
 		--refresh-rate 100 --zero --decoder-num-layers 12 --ddp"
