@@ -31,10 +31,10 @@ class PatchEmbedding(nn.Module):
         patch_embedds: torch.Tensor = (
             self.patch_embedding(x).flatten(2).transpose(-1, -2)
         )
-        patch_embedds: torch.Tensor = patch_embedds + self.positional_embedding(
+        patch_embedds = patch_embedds + self.positional_embedding(
             self.positional_ids
         ).expand_as(patch_embedds)
-        return patch_embedds
+        return patch_embedds  # type: ignore
 
 
 class VisionTransformer(nn.Module):

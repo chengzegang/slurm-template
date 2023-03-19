@@ -127,15 +127,15 @@ class VitDenoiseTrainer(Trainer):
 
     @classmethod
     def _viz(cls, x: torch.Tensor, y: torch.Tensor, yh: torch.Tensor):
-        x = cls._tensor_to_img(x[0], reverse_norm=True)
-        y = cls._tensor_to_img(y[0])
-        yh = cls._tensor_to_img(yh[0])
+        x_img = cls._tensor_to_img(x[0], reverse_norm=True)
+        y_img = cls._tensor_to_img(y[0])
+        yh_img = cls._tensor_to_img(yh[0])
         fig, axes = plt.subplots(1, 3, figsize=(15, 5))
-        axes[0].imshow(x)
+        axes[0].imshow(x_img)
         axes[0].set_title("Input")
-        axes[1].imshow(y)
+        axes[1].imshow(y_img)
         axes[1].set_title("Target")
-        axes[2].imshow(yh)
+        axes[2].imshow(yh_img)
         axes[2].set_title("Prediction")
         for ax in axes:
             ax.set_aspect("equal")
@@ -250,7 +250,6 @@ class VitDenoiseTrainer(Trainer):
 
 
 def build(**kwargs):
-
     model = models.build(**kwargs)
     del kwargs["model"]
     transforms = ResizeCenterCrop(kwargs["image_size"] + 32, kwargs["image_size"])

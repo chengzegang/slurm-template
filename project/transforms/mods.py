@@ -23,8 +23,8 @@ class ResizeCenterCrop(nn.Module):
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         if x.dtype == torch.uint8:
             x = x.float()
-        x: torch.Tensor = self.transforms(x)
-        return x
+        x = self.transforms(x)
+        return x  # type: ignore
 
 
 class AddNoise(nn.Module):
@@ -41,8 +41,8 @@ class AddNoise(nn.Module):
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         if x.dtype == torch.uint8:
             x = x.float()
-        x: torch.Tensor = self.transforms(x)
-        return x
+        x = self.transforms(x)
+        return x  # type: ignore
 
 
 class Normalize(nn.Module):
@@ -54,8 +54,8 @@ class Normalize(nn.Module):
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         if x.dtype == torch.uint8:
             x = x.float()
-        x: torch.Tensor = self.normlize(x)
-        return x
+        x = self.normlize(x)
+        return x  # type: ignore
 
 
 class ReverseNorm(nn.Module):
@@ -69,14 +69,14 @@ class ReverseNorm(nn.Module):
             [-0.485 / 0.229, -0.456 / 0.224, -0.406 / 0.225],
             [1 / 0.229, 1 / 0.224, 1 / 0.225],
         )
-        x: torch.Tensor = x.clamp(0, 1)
-        return x
+        x = x.clamp(0, 1)
+        return x  # type: ignore
 
     @torch.no_grad()
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         if x.dtype == torch.uint8:
             x = x.float()
-        x: torch.Tensor = self._inverse_normalize(x)
+        x = self._inverse_normalize(x)
         x = x * 255
         x = x.to(torch.uint8)
         return x

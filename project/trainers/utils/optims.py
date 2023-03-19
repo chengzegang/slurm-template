@@ -91,13 +91,12 @@ def get_optims(
     total_steps,
     **kwargs,
 ) -> Tuple[torch.optim.Optimizer, LambdaLR]:
-
-    optimizer = get_optimizer(
+    optimizer_ = get_optimizer(
         model, optimizer, lr, weight_decay, betas, momentum, eps, **kwargs
     )
 
-    scheduler = get_scheduler(
-        optimizer, scheduler, total_steps, warmup_steps, start_steps, **kwargs
+    scheduler_ = get_scheduler(
+        optimizer_, scheduler, total_steps, warmup_steps, start_steps, **kwargs
     )
 
-    return optimizer, scheduler
+    return optimizer_, scheduler_
