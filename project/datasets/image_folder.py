@@ -9,6 +9,8 @@ import pandas as pd
 import torch
 from kornia.io import ImageLoadType, load_image
 from torch.utils.data import Dataset
+from torchvision.transforms.functional import pil_to_tensor
+from PIL import Image
 
 __RUST_EXT_NAME = "rust_ext"
 
@@ -57,7 +59,7 @@ class ImageFolder(Dataset):
 
     def __getitem__(self, idx: int) -> torch.Tensor:
         path: str = self._paths["path"][idx]
-        img: torch.Tensor = load_image(path, ImageLoadType.UNCHANGED, device="cuda")
+        img: torch.Tensor = pil_to_tensor(Image.open(path)).float()
         if self.transforms is not None:
             img = self.transforms(img)
         if img.dim() == 4:
