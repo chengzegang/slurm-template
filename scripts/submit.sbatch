@@ -14,7 +14,6 @@
 module purge
 
 export NCCL_DEBUG=INFO
-export NCCL_SOCKET_IFNAME=eth0
 
 nodes=($(scontrol show hostnames $SLURM_JOB_NODELIST))
 echo $nodes
@@ -29,7 +28,7 @@ echo $head_node_ip:29500
 
 
 srun singularity exec --nv \
-	    --overlay /scratch/$USER/containers/overlay-50G-10M.ext3:ro \
+	    --overlay /scratch/$USER/containers/overlay-50G-10M-2.ext3:ro \
 		--overlay /scratch/work/public/ml-datasets/imagenet/imagenet-train.sqf:ro \
   		--overlay /scratch/work/public/ml-datasets/imagenet/imagenet-val.sqf:ro \
 	    /scratch/work/public/singularity/cuda11.7.99-cudnn8.5-devel-ubuntu22.04.2.sif \
