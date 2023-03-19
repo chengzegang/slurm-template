@@ -42,6 +42,6 @@ srun singularity exec --nv \
 		--rdzv_endpoint $head_node_ip:29500 \
 		-m project \
 		train -m vit -t denoise -r /imagenet \
-		--num-workers 16 --batch-size 128 --logdir logs/384 --total-epochs 600 \
-		--ddp --warmup-epochs 30 --image-size 224 --patch-size 16 --split-ratio 0.25 0.05 0.7 \
-		--refresh-rate 100 --zero --decoder-num-layers 12 --ddp --mnmg"
+		--num-workers 16 --batch-size 128 --logdir logs/224 --total-epochs 600 \
+		--warmup-epochs 30 --image-size 224 --patch-size 16 \
+		--ddp --mnmg"
