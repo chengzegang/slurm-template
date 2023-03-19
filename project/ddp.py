@@ -22,7 +22,7 @@ def start(func: Callable, kwargs: dict):
 
 def mnmg_ddp_setup(func: Callable, kwargs: dict):
     dist.init_process_group(backend="nccl")
-    fn(**kwargs)
+    func(**kwargs)
   
   
 def ddp_setup(rank: int, world_size: int, func: Callable, kwargs: dict):
@@ -40,4 +40,4 @@ def ddp_setup(rank: int, world_size: int, func: Callable, kwargs: dict):
         os.environ["MASTER_ADDR"] = "127.0.0.1"
         os.environ["MASTER_PORT"] = str(port)
     dist.init_process_group(backend="nccl", rank=rank, world_size=world_size)
-    fn(**kwargs)
+    func(**kwargs)
