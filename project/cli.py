@@ -13,6 +13,7 @@ def cli():
 
 @cli.command("train")
 @click.option("--ddp", is_flag=True, help="Use DDP")
+@click.option("--mnmg", is_flag=True, help="Training with Multi-Nodes-Multi-GPUs")
 @click.option("--port", type=int, help="Port", default=29500)
 @click.option("--trainer", "-t", type=str, required=True, help="Trainer name")
 @click.option("--model", "-m", type=str, required=True, help="Model name")

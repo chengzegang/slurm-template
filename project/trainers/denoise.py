@@ -62,6 +62,7 @@ class VitDenoiseTrainer(Trainer):
         self.local_rank = int(os.environ.get("LOCAL_RANK", 0))
         self.global_rank = int(os.environ.get("RANK", 0))
         self.world_size = int(os.environ.get("WORLD_SIZE", 1))
+        print(f'process started with {self.local_rank}, {self.global_rank}, {self.world_size}')
         self.device = device
         self.model = model
         if dist.is_available() and dist.is_initialized() and self.device != "cpu":

@@ -7,19 +7,30 @@ import torch.distributed as dist
 
 def start(func: Callable, kwargs: dict):
     if kwargs["ddp"]:
-        size = torch.cuda.device_count()
-        torch.multiprocessing.spawn(
-            init_process,
-            args=(size, kwargs["port"], kwargs, func),
-            nprocs=size,
-            join=True,
-        )
-        cleanup()
+        if not kwargs['mnmg']:
+            size = torch.cuda.device_count()
+            torch.multiprocessing.spawn(
+                ddp_setup,
+                args=(func, kwargs),
+                nprocs=size,
+                join=True,
+            )
+        else:
+            mnmg_ddp_setup(func, kwargs)
     else:
         func(kwargs)
 
-
-def init_process(rank: int, size: int, port: str, kwargs: dict, fn: Callable) -> None:
+def mnmg_ddp_setup(func: Callable, kwargs: dict):
+    dist.init_process_group(backend="nccl")
+    fn(**kwargs)
+  
+  
+def ddp_setup(rank: int, world_size: int, func: Callable, kwargs: dict):
+    """
+    Args:
+        rank: Unique identifier of each process
+       world_size: Total number of processes
+    """
     backend = "nccl"
     if os.name == "nt":
         backend = "gloo"
@@ -28,11 +39,5 @@ def init_process(rank: int, size: int, port: str, kwargs: dict, fn: Callable) ->
     else:
         os.environ["MASTER_ADDR"] = "127.0.0.1"
         os.environ["MASTER_PORT"] = str(port)
-
-    dist.init_process_group(backend, rank=rank, world_size=size)
+    dist.init_process_group(backend="nccl", rank=rank, world_size=world_size)
     fn(**kwargs)
-
-
-def cleanup(*args, **kwargs) -> None:
-    if dist.is_available() and dist.is_initialized():
-        dist.destroy_process_group()
