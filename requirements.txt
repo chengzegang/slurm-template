@@ -10,6 +10,7 @@ psutil
 scipy
 torch==1.13.1
 torchvision==0.14.1
+torchrun
 tqdm
 
 ### dev & test tools ###

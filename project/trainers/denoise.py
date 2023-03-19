@@ -67,7 +67,8 @@ class VitDenoiseTrainer(Trainer):
         self.model = model
         if dist.is_available() and dist.is_initialized() and self.device != "cpu":
             self.device = f"cuda:{self.local_rank}"
-            self.model = DDP(self.model.to(self.device), device_ids=[self.local_rank])
+            self.model = DDP(self.model.to(self.device), device_ids=None if kwargs['mnmg'] else [self.local_rank])
+            # self.model = DDP(self.model.to(self.device), device_ids=[self.local_rank])
         print("model initialized")
 
         self.logdir: str | None = None

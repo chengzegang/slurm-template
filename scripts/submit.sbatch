@@ -12,8 +12,7 @@
 #SBATCH --mail-type=END
 
 module purge
-module load nccl/cuda11.6/2.12.12
-module load openmpi/intel/4.0.5 
+
 export NCCL_DEBUG=INFO
 export NCCL_SOCKET_IFNAME=eth0
 
@@ -30,10 +29,10 @@ echo $head_node_ip:29500
 
 
 srun singularity exec --nv \
-	    --overlay /scratch/$USER/containers/overlay-50G-10M.ext3:ro \
+	    --overlay /scratch/$USER/containers/overlay-50G-10M-2.ext3:ro \
 		--overlay /scratch/work/public/ml-datasets/imagenet/imagenet-train.sqf:ro \
   		--overlay /scratch/work/public/ml-datasets/imagenet/imagenet-val.sqf:ro \
-	    /scratch/work/public/singularity/cuda11.8.86-cudnn8.7-devel-ubuntu22.04.2.sif \
+	    /scratch/work/public/singularity/cuda11.6.124-cudnn8.4.0.27-devel-ubuntu20.04.4.sif \
 	    /bin/bash -c "source /ext3/env.sh; \
 		torchrun --nnodes 2 \
 		--nproc_per_node 1 \
