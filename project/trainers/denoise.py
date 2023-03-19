@@ -58,13 +58,15 @@ class VitDenoiseTrainer(Trainer):
         verbose: bool,
         **kwargs,
     ):
-        local_rank = 0
+        self.slurm_proc_id = os.environ.get("SLURM_PROCID", None)
+        self.local_rank = int(os.environ.get("LOCAL_RANK", 0))
+        self.global_rank = int(os.environ.get("RANK", 0))
+        self.world_size = int(os.environ.get("WORLD_SIZE", 1))
         self.device = device
         self.model = model
         if dist.is_available() and dist.is_initialized() and self.device != "cpu":
-            local_rank = dist.get_rank()
-            self.device = f"cuda:{dist.get_rank()}"
-            self.model = DDP(self.model.to(self.device), device_ids=[dist.get_rank()])
+            self.device = f"cuda:{self.local_rank}"
+            self.model = DDP(self.model.to(self.device), device_ids=[self.local_rank])
         print("model initialized")
 
         self.logdir: str | None = None
@@ -72,7 +74,7 @@ class VitDenoiseTrainer(Trainer):
         self.logger: Logger | None = None
         self.verbose = False
 
-        if local_rank == 0:
+        if self.local_rank == 0:
             self.logdir = get_run_dir(logdir)
             self.ckptdir = os.path.join(self.logdir, "ckpts")
             os.makedirs(self.ckptdir, exist_ok=True)
@@ -184,6 +186,8 @@ class VitDenoiseTrainer(Trainer):
         ckptdir: str | None = None,
         augmentations: nn.Module | None = None,
         device: str = "cpu",
+        global_rank: int = 0,
+        local_rank: int = 0,
     ):
         steps = 0
         data_used = 0
@@ -193,6 +197,9 @@ class VitDenoiseTrainer(Trainer):
         for epoch in range(total_epochs):
             if isinstance(sampler, DistributedSampler):
                 sampler.set_epoch(epoch)
+                print(
+                    f"[GPU{global_rank}:{local_rank}] Epoch {epoch} | Batchsize {dataloader.batch_size} | Steps {len(dataloader)}"
+                )
             for idx, x in enumerate(dataloader):
                 if x.dim() == 3:
                     x = x.unsqueeze(0)
@@ -246,6 +253,8 @@ class VitDenoiseTrainer(Trainer):
             self.ckptdir,
             self.augmentations,
             self.device,
+            self.global_rank,
+            self.local_rank,
         )
 
 
