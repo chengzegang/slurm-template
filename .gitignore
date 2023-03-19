@@ -165,7 +165,6 @@ logs/
 results/
 
 *.out
-*.sbatch
 *.sh
 *.bat
 
