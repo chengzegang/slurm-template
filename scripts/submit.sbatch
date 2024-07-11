@@ -33,13 +33,13 @@ srun singularity exec --nv \
   		--overlay /scratch/work/public/ml-datasets/imagenet/imagenet-val.sqf:ro \
 	    /scratch/work/public/singularity/cuda11.7.99-cudnn8.5-devel-ubuntu22.04.2.sif \
 	    /bin/bash -c "source /ext3/env.sh; \
-		torchrun --nnodes 2 \
-		--nproc_per_node 1 \
+		torchrun --nnodes $SLURM_JOB_NUM_NODES \
+		--nproc_per_node $SLURM_GPUS_ON_NODE \
 		--rdzv_id $SLURM_JOB_ID \
 		--rdzv_backend c10d \
 		--rdzv_endpoint $head_node_ip:29500 \
 		-m project \
 		train -m vit -t denoise -r /imagenet \
-		--num-workers 16 --batch-size 128 --logdir logs/224 --total-epochs 600 \
+		--num-workers $SLURM_CPUS_ON_NODE --batch-size 128 --logdir logs/224 --total-epochs 600 \
 		--warmup-epochs 30 --image-size 224 --patch-size 16 \
 		--ddp --mnmg"
